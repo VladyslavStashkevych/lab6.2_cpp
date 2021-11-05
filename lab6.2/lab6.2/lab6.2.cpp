@@ -10,13 +10,13 @@
 using namespace std;
 
 int *ArrayBuilder(int *a, const int size, const int i);
-int MaxOddElement(int *a, const int size, const int i, int max);
+int MaxOddElement(int *a, const int size, const int i, int max, int indexMax);
 void PrintArray(int *a, const int size, const int i);
 
 int main() {
 	srand((unsigned)time(NULL));
 
-	int *a, n, max = 0;
+	int *a, n, index = -1;
 	cout << "Enter n: "; cin >> n;
 	
 	a = new int[n];
@@ -25,9 +25,9 @@ int main() {
 	cout << "\nArray: ";
 	PrintArray(a, n, 0);
 	
-	max = MaxOddElement(a, n, 0, max);
-	if (max != 0)
-		cout << "\nMax odd element: " << max << endl;
+	index = MaxOddElement(a, n, 0, 0, index);
+	if (index != -1)
+		cout << "\nMax odd element: " << a[index] << endl;
 	else
 		cout << "\nThere is no odd element in array.\n";
 
@@ -43,18 +43,20 @@ int* ArrayBuilder(int *a, const int size, const int i) {
 	}
 }
 
-int MaxOddElement(int *a, const int size, const int i, int max) {
-	if (i >= size) {
-		return max;
-	}
-	else {
-		if (a[i] % 2 == 1) {
-			if (max == 0) max = a[i];
-			else if (a[i] > max) max = a[i];
+int MaxOddElement(int *a, const int size, const int i, int max, int indexMax) {
+	if (i >= size)
+		return indexMax;
+	else if (a[i] % 2 != 0)
+		if (indexMax == -1) {
+			max = a[i];
+			indexMax = i;
+		}
+		else if (a[i] > max) {
+			max = a[i];
+			indexMax = i;
 		}
 
-		return MaxOddElement(a, size, i + 1, max);
-	}
+	return MaxOddElement(a, size, i + 1, max, indexMax);
 }
 
 void PrintArray(int *a, const int size, const int i) {
